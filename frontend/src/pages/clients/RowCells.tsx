@@ -1,10 +1,12 @@
 import { memo } from 'react';
+import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { Button, Popover, Space, Tag, Tooltip } from 'antd';
 import {
   DeleteOutlined,
   EditOutlined,
   InfoCircleOutlined,
+  LineChartOutlined,
   QrcodeOutlined,
   RetweetOutlined,
 } from '@ant-design/icons';
@@ -15,6 +17,7 @@ import type { InboundOption } from '@/hooks/useClients';
 const ICON_BUTTON_STYLE = { fontSize: 16 } as const;
 
 interface ClientRowActionsProps {
+  clientId?: number;
   email: string;
   onShowQr: (email: string) => void;
   onShowInfo: (email: string) => void;
@@ -23,12 +26,9 @@ interface ClientRowActionsProps {
   onDelete: (email: string) => void;
 }
 
-// Five Tooltip-wrapped buttons per row, none of which depend on traffic. Left
-// inline they re-ran rc-tooltip's alignment machinery for every visible row on
-// every traffic push — 125 Tooltips on a 25-row page, five seconds apart.
-// Keyed on the email rather than the row object, because a push replaces the row
-// object of every client whose counters moved; the page resolves the live row.
+// Stable identity props keep traffic pushes from re-rendering every row's actions.
 export const ClientRowActions = memo(function ClientRowActions({
+  clientId,
   email,
   onShowQr,
   onShowInfo,
@@ -37,8 +37,20 @@ export const ClientRowActions = memo(function ClientRowActions({
   onDelete,
 }: ClientRowActionsProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   return (
     <Space size={4}>
+      <Tooltip title={t('trafficHistory.title')}>
+        <Button
+          size="small"
+          type="text"
+          disabled={!clientId}
+          style={ICON_BUTTON_STYLE}
+          icon={<LineChartOutlined aria-hidden />}
+          aria-label={t('trafficHistory.title')}
+          onClick={() => navigate(`/traffic-history?clientId=${clientId}`)}
+        />
+      </Tooltip>
       <Tooltip title={t('pages.clients.qrCode')}>
         <Button
           size="small"

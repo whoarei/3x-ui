@@ -704,6 +704,7 @@ func (s *InboundService) setRemoteTrafficLocked(nodeID int, snap *runtime.Traffi
 
 	structuralChange := false
 	lifecycleLifted := false
+	historyTraffics := make([]*xray.ClientTraffic, 0)
 
 	var adoptedInbounds []*model.Inbound
 	type pendingAdopt struct {
@@ -1199,6 +1200,9 @@ func (s *InboundService) setRemoteTrafficLocked(nodeID int, snap *runtime.Traffi
 			if seen && base == canon {
 				continue
 			}
+			if seen && (deltaUp > 0 || deltaDown > 0) {
+				historyTraffics = append(historyTraffics, &xray.ClientTraffic{Email: cs.Email, Up: deltaUp, Down: deltaDown})
+			}
 			if err := s.upsertNodeBaseline(tx, nodeID, cs.Email, canon.Up, canon.Down); err != nil {
 				return false, err
 			}
@@ -1436,6 +1440,9 @@ func (s *InboundService) setRemoteTrafficLocked(nodeID int, snap *runtime.Traffi
 		logger.Warning("setRemoteTraffic: lift activated expiries failed:", err)
 	}
 
+	if err := recordClientTrafficHistory(tx, nodeID, now/1000, historyTraffics); err != nil {
+		return false, err
+	}
 	if err := tx.Commit().Error; err != nil {
 		return false, err
 	}

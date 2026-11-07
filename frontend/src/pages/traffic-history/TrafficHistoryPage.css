@@ -1,0 +1,73 @@
+.traffic-history-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 1800px;
+  margin: 0 auto;
+}
+.traffic-history-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.traffic-history-heading h3 {
+  margin: 0;
+}
+.traffic-history-client-select {
+  min-width: 280px;
+  max-width: 100%;
+}
+.traffic-history-meta {
+  margin-top: 16px;
+  margin-bottom: 0 !important;
+}
+.traffic-history-filters {
+  width: 100%;
+}
+.traffic-chart-wrap {
+  position: relative;
+  margin-bottom: 16px;
+}
+.traffic-chart {
+  min-height: 345px;
+  color: var(--ant-color-text);
+}
+.traffic-chart .u-legend {
+  white-space: normal;
+  font-size: 12px;
+  margin-top: 8px;
+}
+.traffic-chart-tooltip {
+  position: absolute;
+  top: 8px;
+  z-index: 2;
+  pointer-events: none;
+  padding: 10px 12px;
+  max-width: 270px;
+  white-space: pre-line;
+  border: 1px solid var(--ant-color-border);
+  border-radius: 8px;
+  background: var(--ant-color-bg-elevated);
+  color: var(--ant-color-text);
+  box-shadow: var(--ant-box-shadow-secondary);
+  font-size: 12px;
+}
+@media (max-width: 768px) {
+  .traffic-history-page .content-area {
+    padding: 64px 12px 16px;
+  }
+  .traffic-history-heading h3 {
+    font-size: 20px;
+  }
+  .traffic-history-client-select {
+    min-width: 230px;
+  }
+  .traffic-history-filters .ant-picker {
+    max-width: 100%;
+  }
+  .traffic-history-picker-popup .ant-picker-panel-container {
+    max-width: calc(100vw - 16px);
+    overflow-x: auto;
+  }
+}

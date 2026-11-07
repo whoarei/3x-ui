@@ -114,6 +114,11 @@ func run(root, outDir string) error {
 				"AmneziaWGLogs",
 				"PeerActivity",
 				"HwidSlotStatus",
+				"TrafficHistoryClient",
+				"TrafficHistoryOptions",
+				"TrafficHistoryPoint",
+				"TrafficHistoryClientTotal",
+				"TrafficHistoryResponse",
 			),
 		},
 		{

@@ -4883,6 +4883,218 @@
         ],
         "type": "object"
       },
+      "TrafficHistoryClient": {
+        "properties": {
+          "comment": {
+            "example": "Alice",
+            "type": "string"
+          },
+          "deleted": {
+            "example": false,
+            "type": "boolean"
+          },
+          "email": {
+            "example": "alice",
+            "type": "string"
+          },
+          "id": {
+            "example": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "comment",
+          "deleted",
+          "email",
+          "id"
+        ],
+        "type": "object"
+      },
+      "TrafficHistoryClientTotal": {
+        "properties": {
+          "comment": {
+            "example": "Alice",
+            "type": "string"
+          },
+          "deleted": {
+            "example": false,
+            "type": "boolean"
+          },
+          "down": {
+            "example": 4194304,
+            "format": "int64",
+            "type": "integer"
+          },
+          "email": {
+            "example": "alice",
+            "type": "string"
+          },
+          "id": {
+            "example": 1,
+            "type": "integer"
+          },
+          "up": {
+            "example": 1048576,
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "comment",
+          "deleted",
+          "down",
+          "email",
+          "id",
+          "up"
+        ],
+        "type": "object"
+      },
+      "TrafficHistoryOptions": {
+        "properties": {
+          "clients": {
+            "items": {
+              "$ref": "#/components/schemas/TrafficHistoryClient"
+            },
+            "type": "array"
+          },
+          "lastSample": {
+            "example": 1794103205,
+            "format": "int64",
+            "type": "integer"
+          },
+          "startedAt": {
+            "example": 1794096000,
+            "format": "int64",
+            "type": "integer"
+          },
+          "timeZone": {
+            "example": "Asia/Shanghai",
+            "type": "string"
+          }
+        },
+        "required": [
+          "clients",
+          "lastSample",
+          "startedAt",
+          "timeZone"
+        ],
+        "type": "object"
+      },
+      "TrafficHistoryPoint": {
+        "properties": {
+          "coveredMinutes": {
+            "example": 60,
+            "format": "int64",
+            "type": "integer"
+          },
+          "down": {
+            "example": 4194304,
+            "format": "int64",
+            "type": "integer"
+          },
+          "end": {
+            "example": 1794099600,
+            "format": "int64",
+            "type": "integer"
+          },
+          "expectedMinutes": {
+            "example": 60,
+            "format": "int64",
+            "type": "integer"
+          },
+          "start": {
+            "example": 1794096000,
+            "format": "int64",
+            "type": "integer"
+          },
+          "up": {
+            "example": 1048576,
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "coveredMinutes",
+          "down",
+          "end",
+          "expectedMinutes",
+          "start",
+          "up"
+        ],
+        "type": "object"
+      },
+      "TrafficHistoryResponse": {
+        "properties": {
+          "clientId": {
+            "example": 0,
+            "type": "integer"
+          },
+          "clients": {
+            "items": {
+              "$ref": "#/components/schemas/TrafficHistoryClientTotal"
+            },
+            "type": "array"
+          },
+          "down": {
+            "example": 4194304,
+            "format": "int64",
+            "type": "integer"
+          },
+          "from": {
+            "example": 1794096000,
+            "format": "int64",
+            "type": "integer"
+          },
+          "lastSample": {
+            "example": 1794103205,
+            "format": "int64",
+            "type": "integer"
+          },
+          "points": {
+            "items": {
+              "$ref": "#/components/schemas/TrafficHistoryPoint"
+            },
+            "type": "array"
+          },
+          "resolution": {
+            "example": "hour",
+            "type": "string"
+          },
+          "startedAt": {
+            "example": 1794096000,
+            "format": "int64",
+            "type": "integer"
+          },
+          "timeZone": {
+            "example": "Asia/Shanghai",
+            "type": "string"
+          },
+          "to": {
+            "example": 1794182400,
+            "format": "int64",
+            "type": "integer"
+          },
+          "up": {
+            "example": 1048576,
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "clientId",
+          "clients",
+          "down",
+          "from",
+          "lastSample",
+          "points",
+          "resolution",
+          "startedAt",
+          "timeZone",
+          "to",
+          "up"
+        ],
+        "type": "object"
+      },
       "TuicClientSettings": {
         "properties": {
           "email": {
@@ -8360,6 +8572,150 @@
                       "type": "string"
                     },
                     "obj": {}
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/panel/api/clients/traffic-history/options": {
+      "get": {
+        "tags": [
+          "Clients"
+        ],
+        "summary": "List current and archived traffic-history clients, panel time zone, and collection bounds. Contains no credentials.",
+        "operationId": "get_panel_api_clients_traffic_history_options",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "msg": {
+                      "type": "string"
+                    },
+                    "obj": {
+                      "$ref": "#/components/schemas/TrafficHistoryOptions"
+                    }
+                  }
+                },
+                "example": {
+                  "success": true,
+                  "obj": {
+                    "clients": [
+                      {
+                        "comment": "Alice",
+                        "deleted": false,
+                        "email": "alice",
+                        "id": 1
+                      }
+                    ],
+                    "lastSample": 1794103205,
+                    "startedAt": 1794096000,
+                    "timeZone": "Asia/Shanghai"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/panel/api/clients/traffic-history": {
+      "get": {
+        "tags": [
+          "Clients"
+        ],
+        "summary": "Historical client upload/download bytes, chart buckets and per-client totals. Quota resets do not clear history. Minute-aligned [from, to) range.",
+        "operationId": "get_panel_api_clients_traffic_history",
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "query",
+            "required": false,
+            "description": "0 aggregates all clients; otherwise use a stable client ID from traffic-history/options.",
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": true,
+            "description": "Inclusive Unix timestamp in seconds, rounded down to a minute.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": true,
+            "description": "Exclusive Unix timestamp in seconds, rounded up to a minute.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "msg": {
+                      "type": "string"
+                    },
+                    "obj": {
+                      "$ref": "#/components/schemas/TrafficHistoryResponse"
+                    }
+                  }
+                },
+                "example": {
+                  "success": true,
+                  "obj": {
+                    "clientId": 0,
+                    "clients": [
+                      {
+                        "comment": "Alice",
+                        "deleted": false,
+                        "down": 4194304,
+                        "email": "alice",
+                        "id": 1,
+                        "up": 1048576
+                      }
+                    ],
+                    "down": 4194304,
+                    "from": 1794096000,
+                    "lastSample": 1794103205,
+                    "points": [
+                      {
+                        "coveredMinutes": 60,
+                        "down": 4194304,
+                        "end": 1794099600,
+                        "expectedMinutes": 60,
+                        "start": 1794096000,
+                        "up": 1048576
+                      }
+                    ],
+                    "resolution": "hour",
+                    "startedAt": 1794096000,
+                    "timeZone": "Asia/Shanghai",
+                    "to": 1794182400,
+                    "up": 1048576
                   }
                 }
               }

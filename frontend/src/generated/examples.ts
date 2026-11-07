@@ -1213,6 +1213,72 @@ export const EXAMPLES: Record<string, unknown> = {
     "Tag": "inbound-443",
     "Up": 1048576
   },
+  "TrafficHistoryClient": {
+    "comment": "Alice",
+    "deleted": false,
+    "email": "alice",
+    "id": 1
+  },
+  "TrafficHistoryClientTotal": {
+    "comment": "Alice",
+    "deleted": false,
+    "down": 4194304,
+    "email": "alice",
+    "id": 1,
+    "up": 1048576
+  },
+  "TrafficHistoryOptions": {
+    "clients": [
+      {
+        "comment": "Alice",
+        "deleted": false,
+        "email": "alice",
+        "id": 1
+      }
+    ],
+    "lastSample": 1794103205,
+    "startedAt": 1794096000,
+    "timeZone": "Asia/Shanghai"
+  },
+  "TrafficHistoryPoint": {
+    "coveredMinutes": 60,
+    "down": 4194304,
+    "end": 1794099600,
+    "expectedMinutes": 60,
+    "start": 1794096000,
+    "up": 1048576
+  },
+  "TrafficHistoryResponse": {
+    "clientId": 0,
+    "clients": [
+      {
+        "comment": "Alice",
+        "deleted": false,
+        "down": 4194304,
+        "email": "alice",
+        "id": 1,
+        "up": 1048576
+      }
+    ],
+    "down": 4194304,
+    "from": 1794096000,
+    "lastSample": 1794103205,
+    "points": [
+      {
+        "coveredMinutes": 60,
+        "down": 4194304,
+        "end": 1794099600,
+        "expectedMinutes": 60,
+        "start": 1794096000,
+        "up": 1048576
+      }
+    ],
+    "resolution": "hour",
+    "startedAt": 1794096000,
+    "timeZone": "Asia/Shanghai",
+    "to": 1794182400,
+    "up": 1048576
+  },
   "TuicClientSettings": {
     "email": "",
     "password": "",

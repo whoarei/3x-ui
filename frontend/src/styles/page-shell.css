@@ -1,5 +1,6 @@
 .index-page,
 .clients-page,
+.traffic-history-page,
 .inbounds-page,
 .xray-page,
 .settings-page,
@@ -15,6 +16,7 @@
 
 .index-page.is-dark,
 .clients-page.is-dark,
+.traffic-history-page.is-dark,
 .inbounds-page.is-dark,
 .xray-page.is-dark,
 .settings-page.is-dark,
@@ -28,6 +30,7 @@
 
 .index-page.is-dark.is-ultra,
 .clients-page.is-dark.is-ultra,
+.traffic-history-page.is-dark.is-ultra,
 .inbounds-page.is-dark.is-ultra,
 .xray-page.is-dark.is-ultra,
 .settings-page.is-dark.is-ultra,
@@ -43,6 +46,8 @@
 .index-page .ant-layout-content,
 .clients-page .ant-layout,
 .clients-page .ant-layout-content,
+.traffic-history-page .ant-layout,
+.traffic-history-page .ant-layout-content,
 .inbounds-page .ant-layout,
 .inbounds-page .ant-layout-content,
 .xray-page .ant-layout,
@@ -60,6 +65,7 @@
 
 .index-page .content-shell,
 .clients-page .content-shell,
+.traffic-history-page .content-shell,
 .inbounds-page .content-shell,
 .xray-page .content-shell,
 .settings-page .content-shell,
@@ -71,6 +77,7 @@
 
 .index-page .content-area,
 .clients-page .content-area,
+.traffic-history-page .content-area,
 .inbounds-page .content-area,
 .xray-page .content-area,
 .settings-page .content-area,

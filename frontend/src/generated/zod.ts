@@ -1173,6 +1173,57 @@ export const TrafficSchema = z.object({
 });
 export type Traffic = z.infer<typeof TrafficSchema>;
 
+export const TrafficHistoryClientSchema = z.object({
+  comment: z.string(),
+  deleted: z.boolean(),
+  email: z.string(),
+  id: z.number().int(),
+});
+export type TrafficHistoryClient = z.infer<typeof TrafficHistoryClientSchema>;
+
+export const TrafficHistoryClientTotalSchema = z.object({
+  comment: z.string(),
+  deleted: z.boolean(),
+  down: z.number().int(),
+  email: z.string(),
+  id: z.number().int(),
+  up: z.number().int(),
+});
+export type TrafficHistoryClientTotal = z.infer<typeof TrafficHistoryClientTotalSchema>;
+
+export const TrafficHistoryOptionsSchema = z.object({
+  clients: z.array(z.lazy(() => TrafficHistoryClientSchema)),
+  lastSample: z.number().int(),
+  startedAt: z.number().int(),
+  timeZone: z.string(),
+});
+export type TrafficHistoryOptions = z.infer<typeof TrafficHistoryOptionsSchema>;
+
+export const TrafficHistoryPointSchema = z.object({
+  coveredMinutes: z.number().int(),
+  down: z.number().int(),
+  end: z.number().int(),
+  expectedMinutes: z.number().int(),
+  start: z.number().int(),
+  up: z.number().int(),
+});
+export type TrafficHistoryPoint = z.infer<typeof TrafficHistoryPointSchema>;
+
+export const TrafficHistoryResponseSchema = z.object({
+  clientId: z.number().int(),
+  clients: z.array(z.lazy(() => TrafficHistoryClientTotalSchema)),
+  down: z.number().int(),
+  from: z.number().int(),
+  lastSample: z.number().int(),
+  points: z.array(z.lazy(() => TrafficHistoryPointSchema)),
+  resolution: z.string(),
+  startedAt: z.number().int(),
+  timeZone: z.string(),
+  to: z.number().int(),
+  up: z.number().int(),
+});
+export type TrafficHistoryResponse = z.infer<typeof TrafficHistoryResponseSchema>;
+
 export const TuicClientSettingsSchema = z.object({
   email: z.string(),
   password: z.string(),

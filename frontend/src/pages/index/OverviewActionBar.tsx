@@ -34,6 +34,7 @@ interface OverviewActionBarProps {
   onOpenConfig: () => void;
   onOpenBackup: () => void;
   onOpenSystemHistory: () => void;
+  onOpenTrafficHistory: () => void;
   onOpenXrayMetrics: () => void;
   onOpenPanelUpdate: () => void;
   onOpenVersionSwitch: () => void;
@@ -68,6 +69,7 @@ export default function OverviewActionBar({
   onOpenConfig,
   onOpenBackup,
   onOpenSystemHistory,
+  onOpenTrafficHistory,
   onOpenXrayMetrics,
   onOpenPanelUpdate,
   onOpenVersionSwitch,
@@ -139,6 +141,12 @@ export default function OverviewActionBar({
         icon: <AreaChartOutlined aria-hidden />,
         text: t('pages.index.systemHistoryTitle'),
         onClick: onOpenSystemHistory,
+      },
+      {
+        key: 'trafficHistory',
+        icon: <AreaChartOutlined aria-hidden />,
+        text: t('trafficHistory.title'),
+        onClick: onOpenTrafficHistory,
       },
       {
         key: 'metrics',

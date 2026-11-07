@@ -52,6 +52,8 @@ func NewClientController(g *gin.RouterGroup) *ClientController {
 
 func (a *ClientController) initRouter(g *gin.RouterGroup) {
 	g.GET("/list", a.list)
+	g.GET("/traffic-history/options", a.trafficHistoryOptions)
+	g.GET("/traffic-history", a.trafficHistory)
 	g.GET("/list/paged", a.listPaged)
 	g.GET("/get/:email", a.get)
 	g.GET("/get/subId/:subId", a.getBySubId)
@@ -93,6 +95,35 @@ func (a *ClientController) initRouter(g *gin.RouterGroup) {
 	g.POST("/clientIpsByGuid", a.clientIpsByGuid)
 	g.POST("/activeInbounds", a.activeInbounds)
 	g.POST("/lastOnline", a.lastOnline)
+}
+
+func (a *ClientController) trafficHistoryOptions(c *gin.Context) {
+	location, err := a.settingService.GetTimeLocation()
+	if err != nil {
+		jsonMsg(c, "get time zone failed", err)
+		return
+	}
+	svc := service.ClientTrafficHistoryService{}
+	obj, err := svc.Options(location)
+	jsonObj(c, obj, err)
+}
+
+func (a *ClientController) trafficHistory(c *gin.Context) {
+	from, errFrom := strconv.ParseInt(c.Query("from"), 10, 64)
+	to, errTo := strconv.ParseInt(c.Query("to"), 10, 64)
+	clientId, errId := strconv.Atoi(c.DefaultQuery("clientId", "0"))
+	if errFrom != nil || errTo != nil || errId != nil || clientId < 0 || from < 0 || to <= from || to > 253402300799 {
+		c.JSON(http.StatusBadRequest, gin.H{"success": false, "msg": "Invalid time range or clientId"})
+		return
+	}
+	location, err := a.settingService.GetTimeLocation()
+	if err != nil {
+		jsonMsg(c, "get time zone failed", err)
+		return
+	}
+	svc := service.ClientTrafficHistoryService{}
+	obj, err := svc.Query(clientId, from, to, location)
+	jsonObj(c, obj, err)
 }
 
 func (a *ClientController) list(c *gin.Context) {

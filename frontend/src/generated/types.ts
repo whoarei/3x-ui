@@ -1101,6 +1101,52 @@ export interface Traffic {
   Up: number;
 }
 
+export interface TrafficHistoryClient {
+  comment: string;
+  deleted: boolean;
+  email: string;
+  id: number;
+}
+
+export interface TrafficHistoryClientTotal {
+  comment: string;
+  deleted: boolean;
+  down: number;
+  email: string;
+  id: number;
+  up: number;
+}
+
+export interface TrafficHistoryOptions {
+  clients: TrafficHistoryClient[];
+  lastSample: number;
+  startedAt: number;
+  timeZone: string;
+}
+
+export interface TrafficHistoryPoint {
+  coveredMinutes: number;
+  down: number;
+  end: number;
+  expectedMinutes: number;
+  start: number;
+  up: number;
+}
+
+export interface TrafficHistoryResponse {
+  clientId: number;
+  clients: TrafficHistoryClientTotal[];
+  down: number;
+  from: number;
+  lastSample: number;
+  points: TrafficHistoryPoint[];
+  resolution: string;
+  startedAt: number;
+  timeZone: string;
+  to: number;
+  up: number;
+}
+
 export interface TuicClientSettings {
   email: string;
   password: string;

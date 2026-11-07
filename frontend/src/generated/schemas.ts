@@ -4857,6 +4857,218 @@ export const SCHEMAS: Record<string, unknown> = {
     ],
     "type": "object"
   },
+  "TrafficHistoryClient": {
+    "properties": {
+      "comment": {
+        "example": "Alice",
+        "type": "string"
+      },
+      "deleted": {
+        "example": false,
+        "type": "boolean"
+      },
+      "email": {
+        "example": "alice",
+        "type": "string"
+      },
+      "id": {
+        "example": 1,
+        "type": "integer"
+      }
+    },
+    "required": [
+      "comment",
+      "deleted",
+      "email",
+      "id"
+    ],
+    "type": "object"
+  },
+  "TrafficHistoryClientTotal": {
+    "properties": {
+      "comment": {
+        "example": "Alice",
+        "type": "string"
+      },
+      "deleted": {
+        "example": false,
+        "type": "boolean"
+      },
+      "down": {
+        "example": 4194304,
+        "format": "int64",
+        "type": "integer"
+      },
+      "email": {
+        "example": "alice",
+        "type": "string"
+      },
+      "id": {
+        "example": 1,
+        "type": "integer"
+      },
+      "up": {
+        "example": 1048576,
+        "format": "int64",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "comment",
+      "deleted",
+      "down",
+      "email",
+      "id",
+      "up"
+    ],
+    "type": "object"
+  },
+  "TrafficHistoryOptions": {
+    "properties": {
+      "clients": {
+        "items": {
+          "$ref": "#/components/schemas/TrafficHistoryClient"
+        },
+        "type": "array"
+      },
+      "lastSample": {
+        "example": 1794103205,
+        "format": "int64",
+        "type": "integer"
+      },
+      "startedAt": {
+        "example": 1794096000,
+        "format": "int64",
+        "type": "integer"
+      },
+      "timeZone": {
+        "example": "Asia/Shanghai",
+        "type": "string"
+      }
+    },
+    "required": [
+      "clients",
+      "lastSample",
+      "startedAt",
+      "timeZone"
+    ],
+    "type": "object"
+  },
+  "TrafficHistoryPoint": {
+    "properties": {
+      "coveredMinutes": {
+        "example": 60,
+        "format": "int64",
+        "type": "integer"
+      },
+      "down": {
+        "example": 4194304,
+        "format": "int64",
+        "type": "integer"
+      },
+      "end": {
+        "example": 1794099600,
+        "format": "int64",
+        "type": "integer"
+      },
+      "expectedMinutes": {
+        "example": 60,
+        "format": "int64",
+        "type": "integer"
+      },
+      "start": {
+        "example": 1794096000,
+        "format": "int64",
+        "type": "integer"
+      },
+      "up": {
+        "example": 1048576,
+        "format": "int64",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "coveredMinutes",
+      "down",
+      "end",
+      "expectedMinutes",
+      "start",
+      "up"
+    ],
+    "type": "object"
+  },
+  "TrafficHistoryResponse": {
+    "properties": {
+      "clientId": {
+        "example": 0,
+        "type": "integer"
+      },
+      "clients": {
+        "items": {
+          "$ref": "#/components/schemas/TrafficHistoryClientTotal"
+        },
+        "type": "array"
+      },
+      "down": {
+        "example": 4194304,
+        "format": "int64",
+        "type": "integer"
+      },
+      "from": {
+        "example": 1794096000,
+        "format": "int64",
+        "type": "integer"
+      },
+      "lastSample": {
+        "example": 1794103205,
+        "format": "int64",
+        "type": "integer"
+      },
+      "points": {
+        "items": {
+          "$ref": "#/components/schemas/TrafficHistoryPoint"
+        },
+        "type": "array"
+      },
+      "resolution": {
+        "example": "hour",
+        "type": "string"
+      },
+      "startedAt": {
+        "example": 1794096000,
+        "format": "int64",
+        "type": "integer"
+      },
+      "timeZone": {
+        "example": "Asia/Shanghai",
+        "type": "string"
+      },
+      "to": {
+        "example": 1794182400,
+        "format": "int64",
+        "type": "integer"
+      },
+      "up": {
+        "example": 1048576,
+        "format": "int64",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "clientId",
+      "clients",
+      "down",
+      "from",
+      "lastSample",
+      "points",
+      "resolution",
+      "startedAt",
+      "timeZone",
+      "to",
+      "up"
+    ],
+    "type": "object"
+  },
   "TuicClientSettings": {
     "properties": {
       "email": {

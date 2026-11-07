@@ -29,6 +29,7 @@ describe('OverviewActionBar update tag', () => {
         onOpenConfig={noop}
         onOpenBackup={noop}
         onOpenSystemHistory={noop}
+        onOpenTrafficHistory={noop}
         onOpenXrayMetrics={noop}
         onOpenPanelUpdate={onOpenPanelUpdate}
         onOpenVersionSwitch={noop}

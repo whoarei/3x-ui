@@ -994,6 +994,42 @@ export const sections: readonly Section[] = [
     endpoints: [
       {
         method: 'GET',
+        path: '/panel/api/clients/traffic-history/options',
+        summary:
+          'List current and archived traffic-history clients, panel time zone, and collection bounds. Contains no credentials.',
+        responseSchema: 'TrafficHistoryOptions',
+      },
+      {
+        method: 'GET',
+        path: '/panel/api/clients/traffic-history',
+        summary:
+          'Historical client upload/download bytes, chart buckets and per-client totals. Quota resets do not clear history. Minute-aligned [from, to) range.',
+        params: [
+          {
+            name: 'clientId',
+            in: 'query',
+            type: 'integer',
+            optional: true,
+            defaultValue: 0,
+            desc: '0 aggregates all clients; otherwise use a stable client ID from traffic-history/options.',
+          },
+          {
+            name: 'from',
+            in: 'query',
+            type: 'integer',
+            desc: 'Inclusive Unix timestamp in seconds, rounded down to a minute.',
+          },
+          {
+            name: 'to',
+            in: 'query',
+            type: 'integer',
+            desc: 'Exclusive Unix timestamp in seconds, rounded up to a minute.',
+          },
+        ],
+        responseSchema: 'TrafficHistoryResponse',
+      },
+      {
+        method: 'GET',
         path: '/panel/api/clients/list',
         summary:
           'List every client with its attached inbound IDs and traffic record. The reverse field, if set, is returned as a nested JSON object (legacy JSON-encoded-string form is still accepted on write).',

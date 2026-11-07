@@ -2,6 +2,7 @@ package job
 
 import (
 	"encoding/json"
+	"sync"
 	"time"
 
 	"github.com/mhsanaei/3x-ui/v3/internal/logger"
@@ -15,6 +16,10 @@ import (
 
 // XrayTrafficJob collects and processes traffic statistics from Xray, updating the database and optionally informing external APIs.
 type XrayTrafficJob struct {
+	runMu           sync.Mutex
+	pendingAt       int64
+	pendingTraffic  []*xray.Traffic
+	pendingClients  []*xray.ClientTraffic
 	settingService  service.SettingService
 	xrayService     service.XrayService
 	inboundService  service.InboundService
@@ -72,17 +77,25 @@ func NewXrayTrafficJob() *XrayTrafficJob {
 // real-time updates over WebSocket using compact delta payloads — no REST
 // fallback, scales to 10k–20k+ clients per inbound.
 func (j *XrayTrafficJob) Run() {
-	if !j.xrayService.IsXrayRunning() {
-		return
+	j.runMu.Lock()
+	defer j.runMu.Unlock()
+	if j.pendingAt == 0 {
+		if !j.xrayService.IsXrayRunning() {
+			return
+		}
+		traffics, clients, err := j.xrayService.GetXrayTraffic()
+		if err != nil {
+			return
+		}
+		j.pendingTraffic, j.pendingClients, j.pendingAt = traffics, clients, time.Now().Unix()
 	}
-	traffics, clientTraffics, err := j.xrayService.GetXrayTraffic()
-	if err != nil {
-		return
-	}
-	needRestart0, clientsDisabled, err := j.inboundService.AddTraffic(traffics, clientTraffics)
+	traffics, clientTraffics := j.pendingTraffic, j.pendingClients
+	needRestart0, clientsDisabled, err := j.inboundService.AddTrafficAt(traffics, clientTraffics, j.pendingAt)
 	if err != nil {
 		logger.Warning("add inbound traffic failed:", err)
+		return
 	}
+	j.pendingTraffic, j.pendingClients, j.pendingAt = nil, nil, 0
 	err, needRestart1 := j.outboundService.AddTraffic(traffics, clientTraffics)
 	if err != nil {
 		logger.Warning("add outbound traffic failed:", err)

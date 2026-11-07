@@ -1,6 +1,6 @@
 import { lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
-import { useLocation, useSearchParams } from 'react-router';
+import { useLocation, useNavigate, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import {
   Badge,
@@ -38,6 +38,7 @@ import {
   FilterOutlined,
   InfoCircleOutlined,
   LinkOutlined,
+  LineChartOutlined,
   MoreOutlined,
   PlusOutlined,
   QrcodeOutlined,
@@ -318,6 +319,7 @@ function sortValueFor(column: string | null, order: 'ascend' | 'descend' | null)
 }
 
 export default function ClientsPage() {
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const { isDark, isUltra, antdThemeConfig } = useTheme();
   const { datepicker } = useDatepicker();
@@ -1063,6 +1065,7 @@ export default function ClientsPage() {
         width: 200,
         render: (_v, record) => (
           <ClientRowActions
+            clientId={record.id}
             email={record.email}
             onShowQr={onShowQr}
             onShowInfo={onShowInfo}
@@ -1815,6 +1818,18 @@ export default function ClientsPage() {
                                         placement="bottomRight"
                                         menu={{
                                           items: [
+                                            {
+                                              key: 'history',
+                                              label: (
+                                                <>
+                                                  <LineChartOutlined aria-hidden />{' '}
+                                                  {t('trafficHistory.title')}
+                                                </>
+                                              ),
+                                              disabled: !row.id,
+                                              onClick: () =>
+                                                navigate(`/traffic-history?clientId=${row.id}`),
+                                            },
                                             {
                                               key: 'qr',
                                               label: (

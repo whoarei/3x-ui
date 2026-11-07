@@ -1,5 +1,6 @@
 import { lazy, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router';
 import { Button, ConfigProvider, Layout, Modal, Result, Spin, message } from 'antd';
 import {
   CopyOutlined,
@@ -43,6 +44,7 @@ const VersionModal = lazy(() => import('./VersionModal'));
 import './IndexPage.css';
 
 export default function IndexPage() {
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const { isDark, isUltra, antdThemeConfig } = useTheme();
   const { status, fetched, fetchError, refresh } = useStatusQuery();
@@ -209,6 +211,7 @@ export default function IndexPage() {
                     onOpenConfig={openConfig}
                     onOpenBackup={() => setBackupOpen(true)}
                     onOpenSystemHistory={() => setSysHistoryOpen(true)}
+                    onOpenTrafficHistory={() => navigate('/traffic-history')}
                     onOpenXrayMetrics={() => setXrayMetricsOpen(true)}
                     onOpenPanelUpdate={() => setPanelUpdateOpen(true)}
                     onOpenVersionSwitch={() => setVersionOpen(true)}

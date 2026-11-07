@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router';
 import { describe, expect, it, vi } from 'vitest';
 
 import { ClientInboundChips, ClientRowActions } from '@/pages/clients/RowCells';
@@ -101,14 +102,17 @@ describe('clients table row cells', () => {
         {(doBump) => {
           bump = doBump;
           return (
-            <ClientRowActions
-              email="alice@x"
-              onShowQr={onShowQr}
-              onShowInfo={noop}
-              onResetTraffic={noop}
-              onEdit={onEdit}
-              onDelete={noop}
-            />
+            <MemoryRouter>
+              <ClientRowActions
+                clientId={1}
+                email="alice@x"
+                onShowQr={onShowQr}
+                onShowInfo={noop}
+                onResetTraffic={noop}
+                onEdit={onEdit}
+                onDelete={noop}
+              />
+            </MemoryRouter>
           );
         }}
       </Harness>,
@@ -118,13 +122,11 @@ describe('clients table row cells', () => {
       for (let i = 0; i < 3; i++) bump();
     });
 
-    // Queried by position rather than label: the suite loads the real en-US
-    // bundle, so the aria-labels are translated strings, not keys. Order is
-    // QR, info, reset traffic, edit, delete.
+    // The translated labels come from en-US; history precedes the original actions.
     const buttons = screen.getAllByRole('button');
-    expect(buttons).toHaveLength(5);
-    await userEvent.click(buttons[0]);
-    await userEvent.click(buttons[3]);
+    expect(buttons).toHaveLength(6);
+    await userEvent.click(buttons[1]);
+    await userEvent.click(buttons[4]);
 
     expect(onShowQr).toHaveBeenCalledExactlyOnceWith('alice@x');
     expect(onEdit).toHaveBeenCalledExactlyOnceWith('alice@x');
