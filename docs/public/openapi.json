@@ -2601,6 +2601,37 @@
         ],
         "type": "object"
       },
+      "DomainTrafficControl": {
+        "properties": {
+          "configured": {
+            "example": false,
+            "type": "boolean"
+          },
+          "enabled": {
+            "example": false,
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "running": {
+            "example": true,
+            "type": "boolean"
+          },
+          "supported": {
+            "example": true,
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "configured",
+          "enabled",
+          "error",
+          "running",
+          "supported"
+        ],
+        "type": "object"
+      },
       "DomainTrafficRank": {
         "properties": {
           "down": {
@@ -8753,6 +8784,110 @@
                       "type": "string"
                     },
                     "obj": {}
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/panel/api/clients/domain-traffic/settings": {
+      "get": {
+        "tags": [
+          "Clients"
+        ],
+        "summary": "Read the saved local domain collector setting and the running kernel mode. The setting defaults to false.",
+        "operationId": "get_panel_api_clients_domain_traffic_settings",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "msg": {
+                      "type": "string"
+                    },
+                    "obj": {
+                      "$ref": "#/components/schemas/DomainTrafficControl"
+                    }
+                  }
+                },
+                "example": {
+                  "success": true,
+                  "obj": {
+                    "configured": false,
+                    "enabled": false,
+                    "error": "",
+                    "running": true,
+                    "supported": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Clients"
+        ],
+        "summary": "Save the local domain collector setting and restart Xray to apply it. Active connections are interrupted. An already applied setting is a no-op. Failure preserves the saved choice and returns the actual state for retry.",
+        "operationId": "post_panel_api_clients_domain_traffic_settings",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "enabled": {
+                    "type": "boolean",
+                    "description": "Whether to collect customer/domain traffic."
+                  }
+                },
+                "required": [
+                  "enabled"
+                ]
+              },
+              "example": {
+                "enabled": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "msg": {
+                      "type": "string"
+                    },
+                    "obj": {
+                      "$ref": "#/components/schemas/DomainTrafficControl"
+                    }
+                  }
+                },
+                "example": {
+                  "success": true,
+                  "obj": {
+                    "configured": false,
+                    "enabled": false,
+                    "error": "",
+                    "running": true,
+                    "supported": true
                   }
                 }
               }

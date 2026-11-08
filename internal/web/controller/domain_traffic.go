@@ -26,3 +26,20 @@ func (a *ClientController) domainTraffic(c *gin.Context) {
 	obj, err := svc.Query(service.DomainTrafficQuery{ClientId: client, From: from, To: to, Service: c.Query("service"), Domain: strings.ToLower(strings.TrimSpace(c.Query("domain"))), Search: strings.TrimSpace(c.Query("search"))}, location)
 	jsonObj(c, obj, err)
 }
+
+func (a *ClientController) domainTrafficSettings(c *gin.Context) {
+	obj, err := a.xrayService.GetDomainTrafficControl()
+	jsonObj(c, obj, err)
+}
+
+func (a *ClientController) setDomainTrafficSettings(c *gin.Context) {
+	var request struct {
+		Enabled *bool `json:"enabled"`
+	}
+	if err := c.ShouldBindJSON(&request); err != nil || request.Enabled == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"success": false, "msg": "enabled must be a boolean"})
+		return
+	}
+	obj, err := a.xrayService.SetDomainTrafficEnabled(*request.Enabled)
+	jsonObj(c, obj, err)
+}

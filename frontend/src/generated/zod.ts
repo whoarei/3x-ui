@@ -633,6 +633,15 @@ export const DomainCollectionViewSchema = z.object({
 });
 export type DomainCollectionView = z.infer<typeof DomainCollectionViewSchema>;
 
+export const DomainTrafficControlSchema = z.object({
+  configured: z.boolean(),
+  enabled: z.boolean(),
+  error: z.string(),
+  running: z.boolean(),
+  supported: z.boolean(),
+});
+export type DomainTrafficControl = z.infer<typeof DomainTrafficControlSchema>;
+
 export const DomainTrafficRankSchema = z.object({
   down: z.number().int(),
   key: z.string(),

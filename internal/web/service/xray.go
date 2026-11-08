@@ -182,6 +182,9 @@ func (s *XrayService) GetXrayConfig() (*xray.Config, error) {
 	}
 	xrayConfig.LogConfig = resolveXrayLogPaths(xrayConfig.LogConfig)
 	xrayConfig.API = ensureAPIServices(xrayConfig.API)
+	if err := s.configureDomainTraffic(xrayConfig); err != nil {
+		return nil, err
+	}
 	xrayConfig.Policy = ensureStatsPolicy(xrayConfig.Policy)
 	xrayConfig.RouterConfig = stripDisabledRules(xrayConfig.RouterConfig)
 	// A pasted or restored template can carry pre-#6258 XHTTP keys, a pre-26.10.10 xdns mask or a
@@ -1481,6 +1484,10 @@ func (s *XrayService) TestRoute(req xray.RouteTestRequest) (*xray.RouteTestResul
 func (s *XrayService) RestartXray(isForce bool) error {
 	lock.Lock()
 	defer lock.Unlock()
+	return s.restartXrayLocked(isForce)
+}
+
+func (s *XrayService) restartXrayLocked(isForce bool) error {
 	logger.Debug("restart Xray, force:", isForce)
 	if !isForce && isManuallyStopped.Load() {
 		return nil

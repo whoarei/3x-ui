@@ -55,6 +55,8 @@ func (a *ClientController) initRouter(g *gin.RouterGroup) {
 	g.GET("/traffic-history/options", a.trafficHistoryOptions)
 	g.GET("/traffic-history", a.trafficHistory)
 	g.GET("/domain-traffic", a.domainTraffic)
+	g.GET("/domain-traffic/settings", a.domainTrafficSettings)
+	g.POST("/domain-traffic/settings", a.setDomainTrafficSettings)
 	g.GET("/list/paged", a.listPaged)
 	g.GET("/get/:email", a.get)
 	g.GET("/get/subId/:subId", a.getBySubId)

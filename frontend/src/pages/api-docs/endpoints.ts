@@ -994,6 +994,29 @@ export const sections: readonly Section[] = [
     endpoints: [
       {
         method: 'GET',
+        path: '/panel/api/clients/domain-traffic/settings',
+        summary:
+          'Read the saved local domain collector setting and the running kernel mode. The setting defaults to false.',
+        responseSchema: 'DomainTrafficControl',
+      },
+      {
+        method: 'POST',
+        path: '/panel/api/clients/domain-traffic/settings',
+        summary:
+          'Save the local domain collector setting and restart Xray to apply it. Active connections are interrupted. An already applied setting is a no-op. Failure preserves the saved choice and returns the actual state for retry.',
+        params: [
+          {
+            name: 'enabled',
+            in: 'body (json)',
+            type: 'boolean',
+            desc: 'Whether to collect customer/domain traffic.',
+          },
+        ],
+        body: '{"enabled": false}',
+        responseSchema: 'DomainTrafficControl',
+      },
+      {
+        method: 'GET',
         path: '/panel/api/clients/domain-traffic',
         summary:
           'Customer/service/domain traffic history from the custom Xray kernel. Includes top 100 rankings, sampled coverage, and collector status. Domain detail defaults to 30 days; older service queries use day-aligned summaries retained for 365 days.',

@@ -598,6 +598,14 @@ export interface DomainCollectionView {
   summaryDays: number;
 }
 
+export interface DomainTrafficControl {
+  configured: boolean;
+  enabled: boolean;
+  error: string;
+  running: boolean;
+  supported: boolean;
+}
+
 export interface DomainTrafficRank {
   down: number;
   key: string;

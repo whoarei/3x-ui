@@ -53,15 +53,16 @@ const (
 )
 
 var defaultValueMap = map[string]string{
-	"xrayTemplateConfig": xrayTemplateConfig,
-	"webListen":          "",
-	"webDomain":          "",
-	"webPort":            "2053",
-	"webCertFile":        "",
-	"webKeyFile":         "",
-	"secret":             random.Seq(32),
-	"panelGuid":          uuid.NewString(),
-	"apiToken":           "",
+	"domainTrafficEnabled": "false",
+	"xrayTemplateConfig":   xrayTemplateConfig,
+	"webListen":            "",
+	"webDomain":            "",
+	"webPort":              "2053",
+	"webCertFile":          "",
+	"webKeyFile":           "",
+	"secret":               random.Seq(32),
+	"panelGuid":            uuid.NewString(),
+	"apiToken":             "",
 	// Node mTLS material (opt-in). All default empty: the CA + master client
 	// cert are minted lazily on first use, and the node-side trust CA is pasted
 	// in by the operator. Kept out of entity.AllSetting so private keys never
@@ -1327,6 +1328,10 @@ func (s *SettingService) SetExternalTrafficInformURI(InformURI string) error {
 
 func (s *SettingService) GetRestartXrayOnClientDisable() (bool, error) {
 	return s.getBool("restartXrayOnClientDisable")
+}
+
+func (s *SettingService) GetDomainTrafficEnabled() (bool, error) {
+	return s.getBool("domainTrafficEnabled")
 }
 
 func (s *SettingService) SetRestartXrayOnClientDisable(value bool) error {

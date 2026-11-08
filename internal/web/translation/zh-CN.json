@@ -2906,6 +2906,15 @@
     "notice": "服务根据可见的目标域名识别，共享 CDN、ECH 可能影响归类。未匹配服务库的站点仍保留域名。额度重置不清除这些历史。",
     "retention": "域名分钟明细保留 {detail} 天，服务日汇总保留 {summary} 天；较早时间段按完整自然日查询。",
     "ruleCount": "服务分类库：{services} 个分类 / {rules} 条域名规则",
-    "active": "正在跟踪的连接"
+    "active": "正在跟踪的连接",
+    "collection": "网站流量采集",
+    "saveRestart": "保存并重启 Xray",
+    "runtime": "内核状态",
+    "collecting": "采集中",
+    "collectionOff": "采集已关闭",
+    "stopped": "Xray 未运行",
+    "pending": "保存的设置尚未应用到内核",
+    "restartNotice": "保存会重启本机 Xray 并中断当前连接；未导出的最后一小段流量可能丢失，已保存历史会保留。",
+    "historyAvailable": "仍可查询已有历史，采集关闭期间的流量无法事后还原。"
   }
 }

@@ -643,6 +643,13 @@ export const EXAMPLES: Record<string, unknown> = {
     "startedAt": 1794096000,
     "summaryDays": 365
   },
+  "DomainTrafficControl": {
+    "configured": false,
+    "enabled": false,
+    "error": "",
+    "running": true,
+    "supported": true
+  },
   "DomainTrafficRank": {
     "down": 4194304,
     "key": "youtube",

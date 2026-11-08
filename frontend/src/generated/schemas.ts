@@ -2575,6 +2575,37 @@ export const SCHEMAS: Record<string, unknown> = {
     ],
     "type": "object"
   },
+  "DomainTrafficControl": {
+    "properties": {
+      "configured": {
+        "example": false,
+        "type": "boolean"
+      },
+      "enabled": {
+        "example": false,
+        "type": "boolean"
+      },
+      "error": {
+        "type": "string"
+      },
+      "running": {
+        "example": true,
+        "type": "boolean"
+      },
+      "supported": {
+        "example": true,
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "configured",
+      "enabled",
+      "error",
+      "running",
+      "supported"
+    ],
+    "type": "object"
+  },
   "DomainTrafficRank": {
     "properties": {
       "down": {

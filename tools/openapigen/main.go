@@ -122,6 +122,7 @@ func run(root, outDir string) error {
 				"DomainTrafficRank",
 				"DomainCollectionView",
 				"DomainTrafficResponse",
+				"DomainTrafficControl",
 			),
 		},
 		{

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import {
   Alert,
@@ -13,6 +13,7 @@ import {
   Segmented,
   Space,
   Statistic,
+  Switch,
   Table,
   Tag,
   Typography,
@@ -20,7 +21,11 @@ import {
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
 
 import { HttpUtil } from '@/utils';
-import type { DomainTrafficRank, DomainTrafficResponse } from '@/generated/types';
+import type {
+  DomainTrafficControl,
+  DomainTrafficRank,
+  DomainTrafficResponse,
+} from '@/generated/types';
 import TrafficHistoryChart, { trafficBytes } from './TrafficHistoryChart';
 
 function serviceName(key: string): string {
@@ -56,6 +61,8 @@ export default function DomainTrafficPanel({
   refreshKey: number;
 }) {
   const { t, i18n } = useTranslation();
+  const queryClient = useQueryClient();
+  const [draftEnabled, setDraftEnabled] = useState<boolean | null>(null);
   const [group, setGroup] = useState<'service' | 'domain'>('service');
   const [service, setService] = useState('');
   const [domain, setDomain] = useState('');
@@ -76,6 +83,46 @@ export default function DomainTrafficPanel({
   });
   const data = query.data;
   const status = data?.status;
+  const control = useQuery({
+    queryKey: ['domainTrafficControl'],
+    queryFn: async ({ signal }) => {
+      const msg = await HttpUtil.get<DomainTrafficControl>(
+        '/panel/api/clients/domain-traffic/settings',
+        {},
+        { signal, silent: true },
+      );
+      if (!msg.success || !msg.obj) throw new Error(msg.msg || t('somethingWentWrong'));
+      return msg.obj;
+    },
+    refetchInterval: 15_000,
+  });
+  const changeMode = useMutation({
+    mutationFn: async (enabled: boolean) => {
+      const msg = await HttpUtil.post<DomainTrafficControl>(
+        '/panel/api/clients/domain-traffic/settings',
+        { enabled },
+        { headers: { 'Content-Type': 'application/json' }, silent: true },
+      );
+      if (msg.obj) queryClient.setQueryData(['domainTrafficControl'], msg.obj);
+      if (!msg.success || !msg.obj) throw new Error(msg.msg || t('somethingWentWrong'));
+      return msg.obj;
+    },
+    onSuccess: () => setDraftEnabled(null),
+    onSettled: () => {
+      void queryClient.invalidateQueries({ queryKey: ['domainTrafficControl'] });
+      void queryClient.invalidateQueries({ queryKey: ['domainTraffic'] });
+    },
+  });
+  const selectedEnabled = draftEnabled ?? control.data?.configured ?? false;
+  const collectionWarmingUp =
+    changeMode.isPending ||
+    (changeMode.isSuccess && query.dataUpdatedAt <= changeMode.submittedAt + 10_000);
+  const needsApply =
+    !!control.data &&
+    (selectedEnabled !== control.data.configured ||
+      control.data.configured !== control.data.enabled ||
+      !control.data.running ||
+      (!!control.data.error && control.data.configured));
   const displayGroup = data?.archived ? 'service' : group;
   const label = (key: string) =>
     key === 'unknown' || key === '__unknown__' ? t('domainTraffic.unknown') : serviceName(key);
@@ -144,6 +191,64 @@ export default function DomainTrafficPanel({
     <div className="traffic-history-stack">
       <Card>
         <Space wrap>
+          <Typography.Text>{t('domainTraffic.collection')}</Typography.Text>
+          <Switch
+            aria-label={t('domainTraffic.collection')}
+            checked={selectedEnabled}
+            onChange={setDraftEnabled}
+            disabled={!control.data || changeMode.isPending}
+          />
+          <Button
+            type="primary"
+            loading={changeMode.isPending}
+            disabled={!needsApply || control.isLoading}
+            onClick={() => changeMode.mutate(selectedEnabled)}
+          >
+            {t('domainTraffic.saveRestart')}
+          </Button>
+          {control.data && (
+            <Tag color={control.data.enabled ? 'green' : undefined}>
+              {t('domainTraffic.runtime')}:{' '}
+              {t(
+                !control.data.running
+                  ? 'domainTraffic.stopped'
+                  : !control.data.supported
+                    ? 'domainTraffic.unavailable'
+                    : control.data.enabled
+                      ? 'domainTraffic.collecting'
+                      : 'domainTraffic.collectionOff',
+              )}
+            </Tag>
+          )}
+          {control.data && control.data.configured !== control.data.enabled && (
+            <Tag color="warning">{t('domainTraffic.pending')}</Tag>
+          )}
+        </Space>
+        <Typography.Paragraph type="secondary" className="traffic-history-meta">
+          {t('domainTraffic.restartNotice')}
+        </Typography.Paragraph>
+      </Card>
+      {(control.error || changeMode.error) && (
+        <Alert
+          type="error"
+          showIcon
+          title={t('somethingWentWrong')}
+          description={(changeMode.error || control.error)?.message}
+        />
+      )}
+      {control.data?.running && control.data.supported && !control.data.enabled && (
+        <Alert
+          type="info"
+          showIcon
+          title={t('domainTraffic.collectionOff')}
+          description={t('domainTraffic.historyAvailable')}
+        />
+      )}
+      {control.data?.enabled && collectionWarmingUp && !status?.enabled && (
+        <Alert type="info" showIcon title={t('domainTraffic.waiting')} />
+      )}
+      <Card>
+        <Space wrap>
           <Segmented<'service' | 'domain'>
             value={displayGroup}
             onChange={setGroup}
@@ -200,12 +305,16 @@ export default function DomainTrafficPanel({
           description={query.error.message}
         />
       )}
-      {status && (!status.enabled || query.dataUpdatedAt / 1000 - status.lastSample > 90) && (
+      {((control.data && (!control.data.running || !control.data.supported)) ||
+        (control.data?.enabled &&
+          !collectionWarmingUp &&
+          status &&
+          (!status.enabled || query.dataUpdatedAt / 1000 - status.lastSample > 90))) && (
         <Alert
           type="warning"
           showIcon
           title={t('domainTraffic.unavailable')}
-          description={status.error || t('domainTraffic.waiting')}
+          description={control.data?.error || status?.error || t('domainTraffic.waiting')}
         />
       )}
       {status?.ruleError && <Alert type="info" showIcon title={t('domainTraffic.noRules')} />}

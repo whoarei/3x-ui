@@ -2906,6 +2906,15 @@
     "notice": "Services are inferred from visible destination domains. Shared CDNs and ECH may prevent accurate identification. Unclassified services retain their domain names. Quota resets do not clear this history.",
     "retention": "Domain minute detail: {detail} days. Service daily summaries: {summary} days. Older queries align to whole days.",
     "ruleCount": "Service rules: {services} categories / {rules} domain rules",
-    "active": "Active tracked connections"
+    "active": "Active tracked connections",
+    "collection": "Website traffic collection",
+    "saveRestart": "Save and restart Xray",
+    "runtime": "Kernel state",
+    "collecting": "Collecting",
+    "collectionOff": "Collection disabled",
+    "stopped": "Xray is stopped",
+    "pending": "Saved setting has not been applied",
+    "restartNotice": "Saving restarts the local Xray and interrupts current connections. The last unexported traffic may be lost; saved history is retained.",
+    "historyAvailable": "History remains available. Traffic while collection is disabled cannot be reconstructed."
   }
 }
