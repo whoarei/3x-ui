@@ -2875,15 +2875,15 @@
     "day": "Day",
     "week": "Week",
     "month": "Month",
-    "grain": "Per point",
+    "grain": "Per bar",
     "timezone": "Time zone",
     "firstSample": "Collection started",
     "lastSample": "Last successful sample",
     "noHistory": "Waiting for the first traffic sample",
     "notice": "Historical usage is independent of quota resets and begins when collection is enabled. Times are rounded to minutes; the current minute may be incomplete. Proxy traffic differs from host network totals. Missing collection minutes are not zero usage.",
-    "gaps": "This range includes minutes without collection records. Gaps are unknown usage; partial points only include recorded bytes.",
+    "gaps": "This range includes minutes without collection records. Gaps are unknown usage; partial intervals only include recorded bytes.",
     "invalidRange": "Choose an end time later than the start time.",
-    "chart": "Traffic over time"
+    "chart": "Stacked traffic"
   },
   "domainTraffic": {
     "title": "Websites and services",

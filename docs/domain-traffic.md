@@ -4,7 +4,7 @@
 
 在“客户流量统计”页面选择“网站与服务”。客户和时间条件与原有总量统计共用，支持所有客户、单个客户、近 1 / 7 / 30 天和自定义起止时间。
 
-页面提供服务和域名排行、上传/下载/合计、占比、双曲线及搜索。点击服务查看其域名，点击域名筛选该站点。排行显示所选范围内的前 100 项，并显示完整项目数量。
+页面提供服务和域名排行、上传/下载/合计、占比、双向堆叠柱状图及搜索。点击服务查看其域名，点击域名筛选该站点。排行显示所选范围内的前 100 项，并显示完整项目数量。
 
 ## 数据链路
 
@@ -64,7 +64,7 @@ go run ./tools/serviceindex -in /path/to/geosite.dat -out traffic-services.idx
 
 ## API 与升级
 
-`GET /panel/api/clients/domain-traffic` 使用面板现有认证。参数为 `clientId`、`from`、`to`，以及可选的 `service`、`domain`、`search`。时间使用 Unix 秒，响应包含曲线、排行、运行状态与实际查询范围，不返回连接凭据。
+`GET /panel/api/clients/domain-traffic` 使用面板现有认证。参数为 `clientId`、`from`、`to`，以及可选的 `service`、`domain`、`search`。时间使用 Unix 秒，响应包含图表、排行、运行状态与实际查询范围，不返回连接凭据。
 
 `GET /panel/api/clients/domain-traffic/settings` 返回保存值、内核运行状态、RPC 支持情况和实际开关值。`POST` 同一路径接收 JSON `{"enabled":true}`，保存并重启内核；响应失败时仍可能包含实际状态对象，供界面展示差异并重试。
 

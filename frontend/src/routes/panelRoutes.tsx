@@ -8,7 +8,7 @@ import {
   ExportOutlined,
   GlobalOutlined,
   ImportOutlined,
-  LineChartOutlined,
+  BarChartOutlined,
   SettingOutlined,
   SwapOutlined,
   TagsOutlined,
@@ -44,7 +44,7 @@ export const PANEL_ROUTES: PanelRoute[] = [
   {
     path: '/traffic-history',
     titleKey: 'trafficHistory.title',
-    icon: LineChartOutlined,
+    icon: BarChartOutlined,
     component: TrafficHistoryPage,
   },
   { path: '/groups', titleKey: 'menu.groups', icon: TagsOutlined, component: GroupsPage },

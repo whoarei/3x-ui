@@ -22,7 +22,7 @@ import {
 import {
   ArrowDownOutlined,
   ArrowUpOutlined,
-  LineChartOutlined,
+  BarChartOutlined,
   ReloadOutlined,
 } from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
@@ -201,7 +201,7 @@ export default function TrafficHistoryPage() {
             <div className="traffic-history-stack">
               <div className="traffic-history-heading">
                 <Typography.Title level={3}>
-                  <LineChartOutlined aria-hidden /> {t('trafficHistory.title')}
+                  <BarChartOutlined aria-hidden /> {t('trafficHistory.title')}
                 </Typography.Title>
                 <Button
                   icon={<ReloadOutlined aria-hidden />}
