@@ -582,6 +582,44 @@ export interface ClientsSummary {
   total: number;
 }
 
+export interface DomainCollectionView {
+  active: number;
+  coreId: string;
+  detailDays: number;
+  droppedBytes: number;
+  enabled: boolean;
+  error: string;
+  lastSample: number;
+  overflow: number;
+  ruleDomains: number;
+  ruleError: string;
+  ruleServices: number;
+  startedAt: number;
+  summaryDays: number;
+}
+
+export interface DomainTrafficRank {
+  down: number;
+  key: string;
+  up: number;
+}
+
+export interface DomainTrafficResponse {
+  archived: boolean;
+  domainCount: number;
+  domains: DomainTrafficRank[];
+  down: number;
+  from: number;
+  points: TrafficHistoryPoint[];
+  resolution: string;
+  serviceCount: number;
+  services: DomainTrafficRank[];
+  status: DomainCollectionView;
+  timeZone: string;
+  to: number;
+  up: number;
+}
+
 export interface FallbackParentInfo {
   masterId: number;
   path?: string;

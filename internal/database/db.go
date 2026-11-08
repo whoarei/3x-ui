@@ -90,6 +90,12 @@ func allModels() []any {
 		&model.ClientTrafficHistoryClient{},
 		&model.ClientTrafficHistoryBucket{},
 		&model.ClientTrafficHistoryPoll{},
+		&model.TrafficDomain{},
+		&model.ClientDomainTraffic{},
+		&model.ClientServiceDailyTraffic{},
+		&model.DomainTrafficCheckpoint{},
+		&model.DomainTrafficStatus{},
+		&model.DomainTrafficPoll{},
 	}
 }
 

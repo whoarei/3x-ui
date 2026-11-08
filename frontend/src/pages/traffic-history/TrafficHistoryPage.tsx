@@ -40,6 +40,7 @@ import type {
   TrafficHistoryResponse,
 } from '@/generated/types';
 import TrafficHistoryChart, { trafficBytes } from './TrafficHistoryChart';
+import DomainTrafficPanel from './DomainTrafficPanel';
 import './TrafficHistoryPage.css';
 
 dayjs.extend(utc);
@@ -55,6 +56,8 @@ export default function TrafficHistoryPage() {
   const { t, i18n } = useTranslation();
   const { isDark, isUltra, antdThemeConfig } = useTheme();
   const [params, setParams] = useSearchParams();
+  const view = params.get('view') === 'sites' ? 'sites' : 'clients';
+  const [refreshKey, setRefreshKey] = useState(0);
   const rawId = Number(params.get('clientId') ?? 0);
   const clientId = Number.isSafeInteger(rawId) && rawId > 0 ? rawId : 0;
   const [period, setPeriod] = useState<Period>('1');
@@ -122,7 +125,12 @@ export default function TrafficHistoryPage() {
   }
 
   function selectClient(id: number) {
-    setParams(id ? { clientId: String(id) } : {});
+    setParams((previous) => {
+      const next = new URLSearchParams(previous);
+      if (id) next.set('clientId', String(id));
+      else next.delete('clientId');
+      return next;
+    });
   }
 
   const dateFormat = useMemo(
@@ -199,6 +207,7 @@ export default function TrafficHistoryPage() {
                   icon={<ReloadOutlined aria-hidden />}
                   loading={history.isFetching || options.isFetching}
                   onClick={() => {
+                    setRefreshKey((n) => n + 1);
                     if (period !== 'custom') setRange(recent(Number(period)));
                     void history.refetch();
                     void options.refetch();
@@ -256,87 +265,113 @@ export default function TrafficHistoryPage() {
                   {format(data?.to ?? range.to)}
                 </Typography.Paragraph>
               </Card>
-              {(history.error || options.error) && (
-                <Alert
-                  type="error"
-                  showIcon
-                  title={t('somethingWentWrong')}
-                  description={(history.error || options.error)?.message}
+              <Segmented
+                value={view}
+                onChange={(value) =>
+                  setParams((previous) => {
+                    const next = new URLSearchParams(previous);
+                    next.set('view', value);
+                    return next;
+                  })
+                }
+                options={[
+                  { value: 'clients', label: t('domainTraffic.customerTotal') },
+                  { value: 'sites', label: t('domainTraffic.title') },
+                ]}
+              />
+              {view === 'sites' ? (
+                <DomainTrafficPanel
+                  clientId={clientId}
+                  from={range.from}
+                  to={range.to}
+                  timeZone={timeZone}
+                  refreshKey={refreshKey}
                 />
+              ) : (
+                <>
+                  {(history.error || options.error) && (
+                    <Alert
+                      type="error"
+                      showIcon
+                      title={t('somethingWentWrong')}
+                      description={(history.error || options.error)?.message}
+                    />
+                  )}
+                  <Row gutter={[16, 16]}>
+                    <Col xs={24} md={8}>
+                      <Card>
+                        <Statistic
+                          title={t('trafficHistory.download')}
+                          value={trafficBytes(data?.down ?? 0)}
+                          prefix={<ArrowDownOutlined aria-hidden />}
+                        />
+                      </Card>
+                    </Col>
+                    <Col xs={24} md={8}>
+                      <Card>
+                        <Statistic
+                          title={t('trafficHistory.upload')}
+                          value={trafficBytes(data?.up ?? 0)}
+                          prefix={<ArrowUpOutlined aria-hidden />}
+                        />
+                      </Card>
+                    </Col>
+                    <Col xs={24} md={8}>
+                      <Card>
+                        <Statistic
+                          title={t('trafficHistory.total')}
+                          value={trafficBytes((data?.up ?? 0) + (data?.down ?? 0))}
+                        />
+                      </Card>
+                    </Col>
+                  </Row>
+                  <Card
+                    title={t('trafficHistory.chart')}
+                    loading={history.isLoading}
+                    extra={
+                      data && (
+                        <Tag>
+                          {t('trafficHistory.grain')}: {resolutionLabels[data.resolution]}
+                        </Tag>
+                      )
+                    }
+                  >
+                    {data?.startedAt ? (
+                      <TrafficHistoryChart points={data.points} timeZone={timeZone} />
+                    ) : (
+                      <Empty description={t('trafficHistory.noHistory')} />
+                    )}
+                    {missing && <Alert type="info" showIcon title={t('trafficHistory.gaps')} />}
+                  </Card>
+                  <Card
+                    title={t('trafficHistory.detail')}
+                    extra={
+                      clientId > 0 && (
+                        <Button type="link" onClick={() => selectClient(0)}>
+                          {t('trafficHistory.allClients')}
+                        </Button>
+                      )
+                    }
+                  >
+                    <Table
+                      rowKey="id"
+                      columns={columns}
+                      dataSource={data?.clients ?? []}
+                      loading={history.isLoading}
+                      pagination={{ pageSize: 20, hideOnSinglePage: true }}
+                      scroll={{ x: 700 }}
+                    />
+                  </Card>
+                  <Typography.Paragraph type="secondary">
+                    {t('trafficHistory.notice')}
+                    <br />
+                    {t('trafficHistory.firstSample')}:{' '}
+                    {format(data?.startedAt ?? options.data?.startedAt ?? 0)} ·{' '}
+                    {t('trafficHistory.lastSample')}:{' '}
+                    {format(data?.lastSample ?? options.data?.lastSample ?? 0)}
+                  </Typography.Paragraph>
+                </>
               )}
-              <Row gutter={[16, 16]}>
-                <Col xs={24} md={8}>
-                  <Card>
-                    <Statistic
-                      title={t('trafficHistory.download')}
-                      value={trafficBytes(data?.down ?? 0)}
-                      prefix={<ArrowDownOutlined aria-hidden />}
-                    />
-                  </Card>
-                </Col>
-                <Col xs={24} md={8}>
-                  <Card>
-                    <Statistic
-                      title={t('trafficHistory.upload')}
-                      value={trafficBytes(data?.up ?? 0)}
-                      prefix={<ArrowUpOutlined aria-hidden />}
-                    />
-                  </Card>
-                </Col>
-                <Col xs={24} md={8}>
-                  <Card>
-                    <Statistic
-                      title={t('trafficHistory.total')}
-                      value={trafficBytes((data?.up ?? 0) + (data?.down ?? 0))}
-                    />
-                  </Card>
-                </Col>
-              </Row>
-              <Card
-                title={t('trafficHistory.chart')}
-                loading={history.isLoading}
-                extra={
-                  data && (
-                    <Tag>
-                      {t('trafficHistory.grain')}: {resolutionLabels[data.resolution]}
-                    </Tag>
-                  )
-                }
-              >
-                {data?.startedAt ? (
-                  <TrafficHistoryChart points={data.points} timeZone={timeZone} />
-                ) : (
-                  <Empty description={t('trafficHistory.noHistory')} />
-                )}
-                {missing && <Alert type="info" showIcon title={t('trafficHistory.gaps')} />}
-              </Card>
-              <Card
-                title={t('trafficHistory.detail')}
-                extra={
-                  clientId > 0 && (
-                    <Button type="link" onClick={() => selectClient(0)}>
-                      {t('trafficHistory.allClients')}
-                    </Button>
-                  )
-                }
-              >
-                <Table
-                  rowKey="id"
-                  columns={columns}
-                  dataSource={data?.clients ?? []}
-                  loading={history.isLoading}
-                  pagination={{ pageSize: 20, hideOnSinglePage: true }}
-                  scroll={{ x: 700 }}
-                />
-              </Card>
-              <Typography.Paragraph type="secondary">
-                {t('trafficHistory.notice')}
-                <br />
-                {t('trafficHistory.firstSample')}:{' '}
-                {format(data?.startedAt ?? options.data?.startedAt ?? 0)} ·{' '}
-                {t('trafficHistory.lastSample')}:{' '}
-                {format(data?.lastSample ?? options.data?.lastSample ?? 0)}
-              </Typography.Paragraph>
             </div>
           </Layout.Content>
         </Layout>

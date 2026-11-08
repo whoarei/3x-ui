@@ -119,6 +119,9 @@ func run(root, outDir string) error {
 				"TrafficHistoryPoint",
 				"TrafficHistoryClientTotal",
 				"TrafficHistoryResponse",
+				"DomainTrafficRank",
+				"DomainCollectionView",
+				"DomainTrafficResponse",
 			),
 		},
 		{

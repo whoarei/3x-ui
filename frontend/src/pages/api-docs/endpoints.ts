@@ -994,6 +994,56 @@ export const sections: readonly Section[] = [
     endpoints: [
       {
         method: 'GET',
+        path: '/panel/api/clients/domain-traffic',
+        summary:
+          'Customer/service/domain traffic history from the custom Xray kernel. Includes top 100 rankings, sampled coverage, and collector status. Domain detail defaults to 30 days; older service queries use day-aligned summaries retained for 365 days.',
+        params: [
+          {
+            name: 'clientId',
+            in: 'query',
+            type: 'integer',
+            optional: true,
+            defaultValue: 0,
+            desc: '0 for all customers; otherwise a stable client ID.',
+          },
+          {
+            name: 'from',
+            in: 'query',
+            type: 'integer',
+            desc: 'Inclusive Unix timestamp in seconds.',
+          },
+          {
+            name: 'to',
+            in: 'query',
+            type: 'integer',
+            desc: 'Exclusive Unix timestamp in seconds.',
+          },
+          {
+            name: 'service',
+            in: 'query',
+            type: 'string',
+            optional: true,
+            desc: 'Exact service key returned in the ranking.',
+          },
+          {
+            name: 'domain',
+            in: 'query',
+            type: 'string',
+            optional: true,
+            desc: 'Exact host name; unavailable beyond domain retention.',
+          },
+          {
+            name: 'search',
+            in: 'query',
+            type: 'string',
+            optional: true,
+            desc: 'Case-insensitive substring of domain/service, up to 128 characters.',
+          },
+        ],
+        responseSchema: 'DomainTrafficResponse',
+      },
+      {
+        method: 'GET',
         path: '/panel/api/clients/traffic-history/options',
         summary:
           'List current and archived traffic-history clients, panel time zone, and collection bounds. Contains no credentials.',

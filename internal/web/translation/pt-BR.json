@@ -2884,5 +2884,28 @@
     "gaps": "This range includes minutes without collection records. Gaps are unknown usage; partial points only include recorded bytes.",
     "invalidRange": "Choose an end time later than the start time.",
     "chart": "Traffic over time"
+  },
+  "domainTraffic": {
+    "title": "Websites and services",
+    "customerTotal": "Customer totals",
+    "services": "By service",
+    "domains": "By domain",
+    "service": "Service",
+    "domain": "Domain",
+    "search": "Search domain or service",
+    "showAll": "Show all",
+    "share": "Share",
+    "ranking": "Traffic ranking",
+    "top100": "Top 100",
+    "unknown": "Unknown domain",
+    "unavailable": "Website traffic collector is unavailable",
+    "waiting": "Waiting for the custom Xray kernel to collect traffic",
+    "noRules": "Service rules are not loaded; traffic is still recorded by domain.",
+    "overflow": "The collector reached a resource limit; some traffic could not be attributed.",
+    "archived": "Older ranges use whole-day service summaries. Domain detail is no longer available.",
+    "notice": "Services are inferred from visible destination domains. Shared CDNs and ECH may prevent accurate identification. Unclassified services retain their domain names. Quota resets do not clear this history.",
+    "retention": "Domain minute detail: {detail} days. Service daily summaries: {summary} days. Older queries align to whole days.",
+    "ruleCount": "Service rules: {services} categories / {rules} domain rules",
+    "active": "Active tracked connections"
   }
 }

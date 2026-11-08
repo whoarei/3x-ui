@@ -616,6 +616,47 @@ export const ClientsSummarySchema = z.object({
 });
 export type ClientsSummary = z.infer<typeof ClientsSummarySchema>;
 
+export const DomainCollectionViewSchema = z.object({
+  active: z.number().int(),
+  coreId: z.string(),
+  detailDays: z.number().int(),
+  droppedBytes: z.number().int(),
+  enabled: z.boolean(),
+  error: z.string(),
+  lastSample: z.number().int(),
+  overflow: z.number().int(),
+  ruleDomains: z.number().int(),
+  ruleError: z.string(),
+  ruleServices: z.number().int(),
+  startedAt: z.number().int(),
+  summaryDays: z.number().int(),
+});
+export type DomainCollectionView = z.infer<typeof DomainCollectionViewSchema>;
+
+export const DomainTrafficRankSchema = z.object({
+  down: z.number().int(),
+  key: z.string(),
+  up: z.number().int(),
+});
+export type DomainTrafficRank = z.infer<typeof DomainTrafficRankSchema>;
+
+export const DomainTrafficResponseSchema = z.object({
+  archived: z.boolean(),
+  domainCount: z.number().int(),
+  domains: z.array(z.lazy(() => DomainTrafficRankSchema)),
+  down: z.number().int(),
+  from: z.number().int(),
+  points: z.array(z.lazy(() => TrafficHistoryPointSchema)),
+  resolution: z.string(),
+  serviceCount: z.number().int(),
+  services: z.array(z.lazy(() => DomainTrafficRankSchema)),
+  status: z.lazy(() => DomainCollectionViewSchema),
+  timeZone: z.string(),
+  to: z.number().int(),
+  up: z.number().int(),
+});
+export type DomainTrafficResponse = z.infer<typeof DomainTrafficResponseSchema>;
+
 export const FallbackParentInfoSchema = z.object({
   masterId: z.number().int(),
   path: z.string().optional(),

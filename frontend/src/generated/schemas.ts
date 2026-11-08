@@ -2501,6 +2501,187 @@ export const SCHEMAS: Record<string, unknown> = {
     ],
     "type": "object"
   },
+  "DomainCollectionView": {
+    "properties": {
+      "active": {
+        "example": 20,
+        "type": "integer"
+      },
+      "coreId": {
+        "example": "d350873b45924e919c3650cd5d351e7c",
+        "type": "string"
+      },
+      "detailDays": {
+        "example": 30,
+        "type": "integer"
+      },
+      "droppedBytes": {
+        "example": 0,
+        "format": "int64",
+        "type": "integer"
+      },
+      "enabled": {
+        "example": true,
+        "type": "boolean"
+      },
+      "error": {
+        "type": "string"
+      },
+      "lastSample": {
+        "example": 1794103205,
+        "format": "int64",
+        "type": "integer"
+      },
+      "overflow": {
+        "example": 0,
+        "format": "int64",
+        "type": "integer"
+      },
+      "ruleDomains": {
+        "example": 27855,
+        "type": "integer"
+      },
+      "ruleError": {
+        "type": "string"
+      },
+      "ruleServices": {
+        "example": 1403,
+        "type": "integer"
+      },
+      "startedAt": {
+        "example": 1794096000,
+        "format": "int64",
+        "type": "integer"
+      },
+      "summaryDays": {
+        "example": 365,
+        "type": "integer"
+      }
+    },
+    "required": [
+      "active",
+      "coreId",
+      "detailDays",
+      "droppedBytes",
+      "enabled",
+      "error",
+      "lastSample",
+      "overflow",
+      "ruleDomains",
+      "ruleError",
+      "ruleServices",
+      "startedAt",
+      "summaryDays"
+    ],
+    "type": "object"
+  },
+  "DomainTrafficRank": {
+    "properties": {
+      "down": {
+        "example": 4194304,
+        "format": "int64",
+        "type": "integer"
+      },
+      "key": {
+        "example": "youtube",
+        "type": "string"
+      },
+      "up": {
+        "example": 1048576,
+        "format": "int64",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "down",
+      "key",
+      "up"
+    ],
+    "type": "object"
+  },
+  "DomainTrafficResponse": {
+    "properties": {
+      "archived": {
+        "example": false,
+        "type": "boolean"
+      },
+      "domainCount": {
+        "example": 40,
+        "format": "int64",
+        "type": "integer"
+      },
+      "domains": {
+        "items": {
+          "$ref": "#/components/schemas/DomainTrafficRank"
+        },
+        "type": "array"
+      },
+      "down": {
+        "example": 4194304,
+        "format": "int64",
+        "type": "integer"
+      },
+      "from": {
+        "example": 1794096000,
+        "format": "int64",
+        "type": "integer"
+      },
+      "points": {
+        "items": {
+          "$ref": "#/components/schemas/TrafficHistoryPoint"
+        },
+        "type": "array"
+      },
+      "resolution": {
+        "example": "hour",
+        "type": "string"
+      },
+      "serviceCount": {
+        "example": 12,
+        "format": "int64",
+        "type": "integer"
+      },
+      "services": {
+        "items": {
+          "$ref": "#/components/schemas/DomainTrafficRank"
+        },
+        "type": "array"
+      },
+      "status": {
+        "$ref": "#/components/schemas/DomainCollectionView"
+      },
+      "timeZone": {
+        "example": "Asia/Shanghai",
+        "type": "string"
+      },
+      "to": {
+        "example": 1794182400,
+        "format": "int64",
+        "type": "integer"
+      },
+      "up": {
+        "example": 1048576,
+        "format": "int64",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "archived",
+      "domainCount",
+      "domains",
+      "down",
+      "from",
+      "points",
+      "resolution",
+      "serviceCount",
+      "services",
+      "status",
+      "timeZone",
+      "to",
+      "up"
+    ],
+    "type": "object"
+  },
   "FallbackParentInfo": {
     "description": "FallbackParentInfo carries everything the frontend needs to rewrite a\nchild inbound's client link: where to connect (the master's address\nand port) and which path matched on the master's fallbacks array.\nThe frontend already has the master inbound in its dbInbounds list,\nso we only ship identifiers + the match path here.",
     "properties": {

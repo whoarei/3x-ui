@@ -340,6 +340,7 @@ func (s *Server) startTask(restartXray bool, loc *time.Location) {
 	go func() {
 		time.Sleep(time.Second * 5)
 		_, _ = s.cron.AddJob(cadenceXrayTraffic, job.NewXrayTrafficJob())
+		_, _ = s.cron.AddJob(cadenceXrayTraffic, job.NewDomainTrafficJob())
 	}()
 
 	// Reconcile mtproto (mtg) sidecars and scrape their traffic

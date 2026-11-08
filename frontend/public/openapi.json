@@ -2527,6 +2527,187 @@
         ],
         "type": "object"
       },
+      "DomainCollectionView": {
+        "properties": {
+          "active": {
+            "example": 20,
+            "type": "integer"
+          },
+          "coreId": {
+            "example": "d350873b45924e919c3650cd5d351e7c",
+            "type": "string"
+          },
+          "detailDays": {
+            "example": 30,
+            "type": "integer"
+          },
+          "droppedBytes": {
+            "example": 0,
+            "format": "int64",
+            "type": "integer"
+          },
+          "enabled": {
+            "example": true,
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          },
+          "lastSample": {
+            "example": 1794103205,
+            "format": "int64",
+            "type": "integer"
+          },
+          "overflow": {
+            "example": 0,
+            "format": "int64",
+            "type": "integer"
+          },
+          "ruleDomains": {
+            "example": 27855,
+            "type": "integer"
+          },
+          "ruleError": {
+            "type": "string"
+          },
+          "ruleServices": {
+            "example": 1403,
+            "type": "integer"
+          },
+          "startedAt": {
+            "example": 1794096000,
+            "format": "int64",
+            "type": "integer"
+          },
+          "summaryDays": {
+            "example": 365,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "active",
+          "coreId",
+          "detailDays",
+          "droppedBytes",
+          "enabled",
+          "error",
+          "lastSample",
+          "overflow",
+          "ruleDomains",
+          "ruleError",
+          "ruleServices",
+          "startedAt",
+          "summaryDays"
+        ],
+        "type": "object"
+      },
+      "DomainTrafficRank": {
+        "properties": {
+          "down": {
+            "example": 4194304,
+            "format": "int64",
+            "type": "integer"
+          },
+          "key": {
+            "example": "youtube",
+            "type": "string"
+          },
+          "up": {
+            "example": 1048576,
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "down",
+          "key",
+          "up"
+        ],
+        "type": "object"
+      },
+      "DomainTrafficResponse": {
+        "properties": {
+          "archived": {
+            "example": false,
+            "type": "boolean"
+          },
+          "domainCount": {
+            "example": 40,
+            "format": "int64",
+            "type": "integer"
+          },
+          "domains": {
+            "items": {
+              "$ref": "#/components/schemas/DomainTrafficRank"
+            },
+            "type": "array"
+          },
+          "down": {
+            "example": 4194304,
+            "format": "int64",
+            "type": "integer"
+          },
+          "from": {
+            "example": 1794096000,
+            "format": "int64",
+            "type": "integer"
+          },
+          "points": {
+            "items": {
+              "$ref": "#/components/schemas/TrafficHistoryPoint"
+            },
+            "type": "array"
+          },
+          "resolution": {
+            "example": "hour",
+            "type": "string"
+          },
+          "serviceCount": {
+            "example": 12,
+            "format": "int64",
+            "type": "integer"
+          },
+          "services": {
+            "items": {
+              "$ref": "#/components/schemas/DomainTrafficRank"
+            },
+            "type": "array"
+          },
+          "status": {
+            "$ref": "#/components/schemas/DomainCollectionView"
+          },
+          "timeZone": {
+            "example": "Asia/Shanghai",
+            "type": "string"
+          },
+          "to": {
+            "example": 1794182400,
+            "format": "int64",
+            "type": "integer"
+          },
+          "up": {
+            "example": 1048576,
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "archived",
+          "domainCount",
+          "domains",
+          "down",
+          "from",
+          "points",
+          "resolution",
+          "serviceCount",
+          "services",
+          "status",
+          "timeZone",
+          "to",
+          "up"
+        ],
+        "type": "object"
+      },
       "FallbackParentInfo": {
         "description": "FallbackParentInfo carries everything the frontend needs to rewrite a\nchild inbound's client link: where to connect (the master's address\nand port) and which path matched on the master's fallbacks array.\nThe frontend already has the master inbound in its dbInbounds list,\nso we only ship identifiers + the match path here.",
         "properties": {
@@ -8572,6 +8753,148 @@
                       "type": "string"
                     },
                     "obj": {}
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/panel/api/clients/domain-traffic": {
+      "get": {
+        "tags": [
+          "Clients"
+        ],
+        "summary": "Customer/service/domain traffic history from the custom Xray kernel. Includes top 100 rankings, sampled coverage, and collector status. Domain detail defaults to 30 days; older service queries use day-aligned summaries retained for 365 days.",
+        "operationId": "get_panel_api_clients_domain_traffic",
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "query",
+            "required": false,
+            "description": "0 for all customers; otherwise a stable client ID.",
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": true,
+            "description": "Inclusive Unix timestamp in seconds.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": true,
+            "description": "Exclusive Unix timestamp in seconds.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "service",
+            "in": "query",
+            "required": false,
+            "description": "Exact service key returned in the ranking.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "domain",
+            "in": "query",
+            "required": false,
+            "description": "Exact host name; unavailable beyond domain retention.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "description": "Case-insensitive substring of domain/service, up to 128 characters.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "msg": {
+                      "type": "string"
+                    },
+                    "obj": {
+                      "$ref": "#/components/schemas/DomainTrafficResponse"
+                    }
+                  }
+                },
+                "example": {
+                  "success": true,
+                  "obj": {
+                    "archived": false,
+                    "domainCount": 40,
+                    "domains": [
+                      {
+                        "down": 4194304,
+                        "key": "youtube",
+                        "up": 1048576
+                      }
+                    ],
+                    "down": 4194304,
+                    "from": 1794096000,
+                    "points": [
+                      {
+                        "coveredMinutes": 60,
+                        "down": 4194304,
+                        "end": 1794099600,
+                        "expectedMinutes": 60,
+                        "start": 1794096000,
+                        "up": 1048576
+                      }
+                    ],
+                    "resolution": "hour",
+                    "serviceCount": 12,
+                    "services": [
+                      {
+                        "down": 4194304,
+                        "key": "youtube",
+                        "up": 1048576
+                      }
+                    ],
+                    "status": {
+                      "active": 20,
+                      "coreId": "d350873b45924e919c3650cd5d351e7c",
+                      "detailDays": 30,
+                      "droppedBytes": 0,
+                      "enabled": true,
+                      "error": "",
+                      "lastSample": 1794103205,
+                      "overflow": 0,
+                      "ruleDomains": 27855,
+                      "ruleError": "",
+                      "ruleServices": 1403,
+                      "startedAt": 1794096000,
+                      "summaryDays": 365
+                    },
+                    "timeZone": "Asia/Shanghai",
+                    "to": 1794182400,
+                    "up": 1048576
                   }
                 }
               }

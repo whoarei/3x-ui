@@ -628,6 +628,76 @@ export const EXAMPLES: Record<string, unknown> = {
     "onlineCount": 1,
     "total": 2000
   },
+  "DomainCollectionView": {
+    "active": 20,
+    "coreId": "d350873b45924e919c3650cd5d351e7c",
+    "detailDays": 30,
+    "droppedBytes": 0,
+    "enabled": true,
+    "error": "",
+    "lastSample": 1794103205,
+    "overflow": 0,
+    "ruleDomains": 27855,
+    "ruleError": "",
+    "ruleServices": 1403,
+    "startedAt": 1794096000,
+    "summaryDays": 365
+  },
+  "DomainTrafficRank": {
+    "down": 4194304,
+    "key": "youtube",
+    "up": 1048576
+  },
+  "DomainTrafficResponse": {
+    "archived": false,
+    "domainCount": 40,
+    "domains": [
+      {
+        "down": 4194304,
+        "key": "youtube",
+        "up": 1048576
+      }
+    ],
+    "down": 4194304,
+    "from": 1794096000,
+    "points": [
+      {
+        "coveredMinutes": 60,
+        "down": 4194304,
+        "end": 1794099600,
+        "expectedMinutes": 60,
+        "start": 1794096000,
+        "up": 1048576
+      }
+    ],
+    "resolution": "hour",
+    "serviceCount": 12,
+    "services": [
+      {
+        "down": 4194304,
+        "key": "youtube",
+        "up": 1048576
+      }
+    ],
+    "status": {
+      "active": 20,
+      "coreId": "d350873b45924e919c3650cd5d351e7c",
+      "detailDays": 30,
+      "droppedBytes": 0,
+      "enabled": true,
+      "error": "",
+      "lastSample": 1794103205,
+      "overflow": 0,
+      "ruleDomains": 27855,
+      "ruleError": "",
+      "ruleServices": 1403,
+      "startedAt": 1794096000,
+      "summaryDays": 365
+    },
+    "timeZone": "Asia/Shanghai",
+    "to": 1794182400,
+    "up": 1048576
+  },
   "FallbackParentInfo": {
     "masterId": 0,
     "path": ""
